@@ -1,0 +1,16 @@
+
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  max-width: calc(100vw - 48px);
+}
+
+.leaflet-popup-content {
+  max-width: min(248px, calc(100vw - 80px));
+  overflow-wrap: anywhere;
+}

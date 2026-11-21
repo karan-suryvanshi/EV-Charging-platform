@@ -1,0 +1,59 @@
+services:
+  backend:
+    build:
+      context: ./backend/ev-charging-backend
+      dockerfile: Dockerfile.dev
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    volumes:
+      - maven_cache:/root/.m2
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/ev-charging-backend/src
+          target: /workspace/src
+        - action: rebuild
+          path: ./backend/ev-charging-backend/pom.xml
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8082/api}
+      VITE_USE_POLLING: "true"
+      VITE_HMR_CLIENT_PORT: "5173"
+    ports: !override
+      - "127.0.0.1:5173:5173"
+    command:
+      - sh
+      - -c
+      - >-
+        lock_hash=$$(sha256sum package.json package-lock.json | sha256sum | cut -d ' ' -f 1);
+        if [ ! -x node_modules/.bin/vite ] || [ "$$(cat node_modules/.ev-package-hash 2>/dev/null)" != "$$lock_hash" ]; then
+        npm ci && printf '%s\n' "$$lock_hash" > node_modules/.ev-package-hash;
+        fi && npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:5173/public-stations').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./frontend/vite.config.js
+          target: /app/vite.config.js
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/package-lock.json
+
+volumes:
+  maven_cache:
+  frontend_node_modules:

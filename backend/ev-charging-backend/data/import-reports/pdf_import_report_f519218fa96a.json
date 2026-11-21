@@ -1,0 +1,27 @@
+{
+  "sourcePdf": "Ev_charging_station_data.pdf",
+  "sourcePdfSha256": "f519218fa96a04f57b3c56e919a8045133e7df1307a77710cca0076ab25b6882",
+  "validationReportSha256": "a85459975c8e9b9bb971d8ff7863060c6e1c4422f19086bd1ba8c35bdfe819a6",
+  "pagesInPdf": 1159,
+  "pagesProcessed": 1159,
+  "recordsExtracted": 38332,
+  "cleanRecords": 28561,
+  "recordsWithWarnings": 9771,
+  "warningMessages": 10366,
+  "orphanRowsRetained": 186,
+  "databaseCounts": {
+    "productionTotal": 66755,
+    "productionRowsFromBatch": 38332,
+    "rawStationRows": 38332,
+    "rawStationRowsWithWarnings": 9771,
+    "rawOrphanRows": 186,
+    "productionRowsWithWarnings": 9771,
+    "existingRowsOutsideThisBatch": 28423,
+    "rawRowsRetainedTotal": 38518
+  },
+  "orphanCsv": "E:\\ev-charging-platform\\backend\\ev-charging-backend\\data\\import-reports\\orphan_rows_f519218fa96a.csv",
+  "backup": "E:\\ev-charging-platform\\backups\\ev_charging_db_pre_pdf_import_20261026.sql",
+  "backupSha256": "b5d29ea50d1558f8808d9bc9bb8bf0454fc092c4524ff51425d5e8b71ee7a6d6",
+  "completedAtUtc": "2026-10-25T21:13:52.909064+00:00",
+  "importSql": "E:\\ev-charging-platform\\backend\\ev-charging-backend\\data\\import-reports\\import_f519218fa96a.sql"
+}

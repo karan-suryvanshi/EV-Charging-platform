@@ -1,0 +1,12 @@
+# syntax=docker/dockerfile:1.7
+FROM maven:3.9.9-eclipse-temurin-17
+WORKDIR /workspace
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw mvnw
+RUN chmod +x mvnw
+COPY src src
+RUN --mount=type=cache,id=evcharging-maven-repo,target=/root/.m2,sharing=locked \
+    ./mvnw -B -U -Daether.transport.http.retryHandler.count=5 -DskipTests compile
+EXPOSE 8080
+CMD ["./mvnw", "-B", "-U", "-Daether.transport.http.retryHandler.count=5", "spring-boot:run"]
